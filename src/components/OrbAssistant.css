@@ -1,0 +1,77 @@
+.orb-wrapper {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.orb-ring-outer {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  border: 1px solid;
+  opacity: 0.4;
+}
+
+.pulse-ring {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 1.5px solid;
+  pointer-events: none;
+}
+
+.orb-main {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  z-index: 2;
+  overflow: hidden;
+}
+
+.orb-core {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.orb-emoji {
+  position: relative;
+  font-size: 36px;
+  z-index: 3;
+  filter: drop-shadow(0 0 12px rgba(255,255,255,0.4));
+}
+
+.waveform {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  z-index: 4;
+}
+
+.wave-bar {
+  width: 3px;
+  height: 20px;
+  border-radius: 2px;
+  transform-origin: center;
+}
+
+.orbit-particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+}
