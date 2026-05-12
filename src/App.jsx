@@ -209,6 +209,26 @@ export default function App() {
 
   return (
     <div className="app-root">
+      {/* Global Close Button */}
+      {!showWelcome && !showPlayerSelection && (
+        <motion.button
+          className="global-close-btn"
+          onClick={() => {
+            if (window.electronAPI) {
+              window.electronAPI.hideWindow();
+            } else {
+              setShowWelcome(true);
+            }
+          }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <X size={20} />
+        </motion.button>
+      )}
+
       {/* Animated background */}
       <div className="bg-layer">
         <div className="bg-gradient"
