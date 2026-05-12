@@ -22,7 +22,7 @@ import {
 import './App.css';
 
 const TABS = [
-  { id: 'chat', label: 'ARIA', icon: <Cpu size={14} /> },
+  { id: 'chat', label: 'VN', icon: <Cpu size={14} /> },
   { id: 'player', label: 'Player', icon: <Radio size={14} /> },
   { id: 'moods', label: 'Moods', icon: <Zap size={14} /> },
   { id: 'memory', label: 'Memory', icon: <Brain size={14} /> },
@@ -170,7 +170,7 @@ export default function App() {
                 transition={{ duration: 2.5, repeat: Infinity }}
               />
               <h1 className="welcome-title">
-                <span className="gradient-text">ARIA</span>
+                <span className="gradient-text">VN</span>
               </h1>
               <p className="welcome-sub">Universal AI Music Companion</p>
               <p className="welcome-desc">
@@ -211,7 +211,7 @@ export default function App() {
               transition={{ duration: 2.5, repeat: Infinity }}
             />
             <div>
-              <span className="logo-text gradient-text">ARIA</span>
+              <span className="logo-text gradient-text">VN</span>
               <span className="logo-version">v1.0 MVP</span>
             </div>
           </div>
@@ -453,7 +453,7 @@ export default function App() {
                 animate={{ opacity: [0.6, 1, 0.6], scale: [1, 1.3, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               />
-              <span className="aria-status-title">ARIA Status</span>
+              <span className="aria-status-title">VN Status</span>
             </div>
             <div className="status-rows">
               {[

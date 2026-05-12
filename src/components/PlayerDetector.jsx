@@ -18,7 +18,7 @@ export default function PlayerDetector({ activePlayer, onSelectPlayer, onDismiss
           />
           <span>Scanning for music apps…</span>
         </div>
-        <p className="detector-sub">Select the player you want ARIA to control</p>
+        <p className="detector-sub">Select the player you want VN to control</p>
       </div>
 
       <div className="player-grid">
