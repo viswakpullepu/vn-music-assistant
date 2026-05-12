@@ -11,28 +11,33 @@
 
 :root {
   /* Core Palette */
-  --black: #050508;
-  --surface-0: #08080f;
-  --surface-1: #0e0e1a;
-  --surface-2: #14141f;
-  --surface-3: #1a1a2a;
-  --surface-4: #20203a;
+  --black: #000000;
+  --surface-0: #050505;
+  --surface-1: #0a0a0a;
+  --surface-2: #111111;
+  --surface-3: #161616;
+  --surface-4: #1a1a1a;
 
-  /* Neon Colors */
-  --cyan: #00f5ff;
-  --cyan-dim: #00b8cc;
-  --cyan-glow: rgba(0, 245, 255, 0.15);
-  --purple: #a855f7;
-  --purple-dim: #7c3aed;
-  --purple-glow: rgba(168, 85, 247, 0.15);
-  --blue: #3b82f6;
-  --blue-glow: rgba(59, 130, 246, 0.15);
-  --pink: #ec4899;
-  --pink-glow: rgba(236, 72, 153, 0.15);
-  --gold: #fbbf24;
-  --gold-glow: rgba(251, 191, 36, 0.15);
-  --green: #10b981;
-  --green-glow: rgba(16, 185, 129, 0.15);
+  /* Luxury Colors */
+  --cyan: #d4af37; /* Metallic Gold */
+  --cyan-dim: #b5952f;
+  --cyan-glow: rgba(212, 175, 55, 0.15);
+  
+  --purple: #ffffff; /* Crisp White */
+  --purple-dim: #e0e0e0;
+  --purple-glow: rgba(255, 255, 255, 0.15);
+  
+  --blue: #fcf6ba; /* Light Gold */
+  --blue-glow: rgba(252, 246, 186, 0.15);
+  
+  --pink: #d4af37; /* Gold */
+  --pink-glow: rgba(212, 175, 55, 0.15);
+  
+  --gold: #d4af37;
+  --gold-glow: rgba(212, 175, 55, 0.15);
+  
+  --green: #ffffff;
+  --green-glow: rgba(255, 255, 255, 0.15);
 
   /* Glass */
   --glass-bg: rgba(255, 255, 255, 0.04);
@@ -59,9 +64,9 @@
   --r-2xl: 32px; --r-full: 9999px;
 
   /* Shadows */
-  --shadow-cyan: 0 0 30px rgba(0, 245, 255, 0.2);
-  --shadow-purple: 0 0 30px rgba(168, 85, 247, 0.2);
-  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-cyan: 0 0 30px rgba(212, 175, 55, 0.2);
+  --shadow-purple: 0 0 30px rgba(255, 255, 255, 0.2);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.8);
 
   /* Transitions */
   --t-fast: 150ms ease;
@@ -114,9 +119,9 @@ body {
   transition: var(--t-base);
 }
 
-/* ---- Neon Text ---- */
-.neon-cyan { color: var(--cyan); text-shadow: 0 0 20px rgba(0, 245, 255, 0.5); }
-.neon-purple { color: var(--purple); text-shadow: 0 0 20px rgba(168, 85, 247, 0.5); }
+/* ---- Neon Text -> Luxury Text ---- */
+.neon-cyan { color: var(--cyan); text-shadow: 0 0 20px rgba(212, 175, 55, 0.5); }
+.neon-purple { color: var(--purple); text-shadow: 0 0 20px rgba(255, 255, 255, 0.5); }
 
 /* ---- Gradient Text ---- */
 .gradient-text {
@@ -213,9 +218,10 @@ body {
 .btn:active { transform: scale(0.96); }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--purple-dim), var(--cyan-dim));
-  color: white;
-  box-shadow: 0 4px 24px rgba(168, 85, 247, 0.3);
+  background: linear-gradient(135deg, var(--cyan-dim), var(--cyan));
+  color: #000;
+  font-weight: 600;
+  box-shadow: 0 4px 24px rgba(212, 175, 55, 0.3);
 }
 
 .btn-ghost {

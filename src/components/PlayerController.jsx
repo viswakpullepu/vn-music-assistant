@@ -166,7 +166,7 @@ export default function PlayerController({ controller, songs, moodData, onSkip, 
         <motion.button
           className="ctrl-btn play-btn"
           onClick={handlePlayPause}
-          style={{ background: accent, boxShadow: glowShadow }}
+          style={{ background: `linear-gradient(135deg, ${accent}, #fcf6ba)`, boxShadow: glowShadow }}
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.92 }}
           id="play-pause-btn"

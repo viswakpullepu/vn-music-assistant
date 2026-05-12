@@ -42,7 +42,7 @@ export default function App() {
   const [memory, setMemory] = useState(loadMemory);
   const [songs, setSongs] = useState([]);
   const [showWelcome, setShowWelcome] = useState(true);
-  const [bgPalette, setBgPalette] = useState(['#a855f7', '#00f5ff', '#3b82f6']);
+  const [bgPalette, setBgPalette] = useState(['#d4af37', '#ffffff', '#b5952f']);
   const [sessionCount, setSessionCount] = useState(0);
   const [chatOpen, setChatOpen] = useState(false);
   const [showPlayerSelection, setShowPlayerSelection] = useState(false);
@@ -108,7 +108,7 @@ export default function App() {
     setMood(resolvedMood);
     setMoodData(data);
     setSongs(data.songs || []);
-    setBgPalette(data.palette || ['#a855f7', '#00f5ff', '#3b82f6']);
+    setBgPalette(data.palette || ['#d4af37', '#ffffff', '#b5952f']);
 
     // Update memory
     let updatedMem = recordMood(memory, resolvedMood);
