@@ -116,15 +116,13 @@ export default function App() {
     setMemory(updatedMem);
 
     // AI response
-    const resp = getAIResponse(resolvedMood, data, memory);
+    let resp = getAIResponse(resolvedMood, data, memory);
+    const playerName = controller.adapter?.name || 'your player';
+    resp += ` Tap the play button to open ${playerName}.`;
+
     setTimeout(() => {
       speakAriaResponse(resp);
       
-      // Auto-play via adapter deep linking
-      if (controller.adapter && data.songs?.length > 0) {
-        controller.play(data.label); 
-      }
-
       if (window.electronAPI) {
         // Auto-hide chat after responding
         setTimeout(() => setChatOpen(false), 3000);

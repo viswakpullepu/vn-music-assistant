@@ -28,7 +28,7 @@ export default function PlayerController({ controller, songs, moodData, onSkip, 
   useEffect(() => {
     if (!controller || !songs?.length) return;
     controller.loadSongs(songs);
-    controller.play(moodData?.label);
+    // Removed controller.play() here because browsers block deep links without a direct user gesture
     setState({ ...controller.getState() });
     setLiked(false);
   }, [songs, moodData]);
