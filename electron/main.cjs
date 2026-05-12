@@ -4,6 +4,7 @@ const { exec } = require('child_process');
 
 let mainWindow;
 let detectionInterval;
+let currentlyActivePlayer = null;
 
 // List of known players
 const KNOWN_PLAYERS = [
@@ -29,6 +30,7 @@ function createWindow() {
     transparent: true, // Transparent for floating effect
     alwaysOnTop: true, // Float above music player
     resizable: false,
+    skipTaskbar: true, // Don't show in taskbar so it feels like a widget
     webPreferences: {
       preload: path.join(__dirname, 'preload.cjs'),
       nodeIntegration: false,
@@ -36,7 +38,6 @@ function createWindow() {
     },
   });
 
-  // Load Vite dev server or production build
   const startUrl = process.env.VITE_DEV_SERVER_URL || `file://${path.join(__dirname, '../dist/index.html')}`;
   mainWindow.loadURL(startUrl);
 
@@ -47,46 +48,79 @@ function createWindow() {
 
 // OS Process Detection
 function checkProcesses() {
-  // Using 'tasklist' for Windows
-  exec('tasklist', (err, stdout, stderr) => {
+  // Use tasklist but filter for running processes to make it slightly faster
+  exec('tasklist /FI "STATUS eq RUNNING" /FO CSV /NH', (err, stdout, stderr) => {
     if (err) return;
+    
     const runningProcesses = stdout.toLowerCase();
+    let foundPlayer = null;
     
     for (const player of KNOWN_PLAYERS) {
       if (runningProcesses.includes(player.exe.toLowerCase())) {
+        foundPlayer = player;
+        break; // Stop at first found
+      }
+    }
+
+    if (foundPlayer) {
+      // If we found a player and it's new (or we just launched)
+      if (!currentlyActivePlayer || currentlyActivePlayer.name !== foundPlayer.name) {
+        currentlyActivePlayer = foundPlayer;
+        
         if (mainWindow) {
-          mainWindow.webContents.send('player-detected', player);
+          mainWindow.webContents.send('player-detected', foundPlayer);
+          // POP UP behavior
           if (!mainWindow.isVisible()) {
             mainWindow.show();
-            // Optional: Bring to front and focus
-            mainWindow.setAlwaysOnTop(true, 'floating');
+            mainWindow.focus(); // Bring to foreground immediately
           }
         }
-        return; // Only notify the first found
+      }
+    } else {
+      // If NO music player is running, hide the assistant
+      if (currentlyActivePlayer) {
+        currentlyActivePlayer = null;
+        if (mainWindow && mainWindow.isVisible()) {
+          mainWindow.hide(); // Disappear cleanly
+        }
       }
     }
   });
 }
 
-app.whenReady().then(() => {
-  createWindow();
+// Ensure single instance lock so we don't open 5 assistants
+const gotTheLock = app.requestSingleInstanceLock();
 
-  // Poll every 3 seconds for running music players
-  detectionInterval = setInterval(checkProcesses, 3000);
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.focus();
     }
   });
-});
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-  if (detectionInterval) clearInterval(detectionInterval);
-});
+  app.whenReady().then(() => {
+    createWindow();
+
+    // Poll every 1.5 seconds for extremely snappy pop-ups
+    detectionInterval = setInterval(checkProcesses, 1500);
+
+    app.on('activate', () => {
+      if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
+      }
+    });
+  });
+
+  app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+      app.quit();
+    }
+    if (detectionInterval) clearInterval(detectionInterval);
+  });
+}
 
 // IPC handlers
 ipcMain.on('hide-window', () => {
