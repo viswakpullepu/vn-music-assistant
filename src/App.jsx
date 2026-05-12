@@ -120,9 +120,9 @@ export default function App() {
     setTimeout(() => {
       speakAriaResponse(resp);
       
-      // Auto-play via adapter (simulated)
+      // Auto-play via adapter deep linking
       if (controller.adapter && data.songs?.length > 0) {
-        controller.play(); 
+        controller.play(data.label); 
       }
 
       if (window.electronAPI) {

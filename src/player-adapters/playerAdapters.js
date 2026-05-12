@@ -12,7 +12,7 @@ class BasePlayerAdapter {
   }
   async connect() { this.isConnected = true; }
   async disconnect() { this.isConnected = false; }
-  async play() { this._dispatch('play'); }
+  async play(context) { this._dispatch('play', context); }
   async pause() { this._dispatch('pause'); }
   async next() { this._dispatch('next'); }
   async prev() { this._dispatch('prev'); }
@@ -27,7 +27,11 @@ class BasePlayerAdapter {
 // ---- Spotify Adapter ----
 class SpotifyAdapter extends BasePlayerAdapter {
   constructor() { super('Spotify', '🎧', '#1DB954'); }
-  async play() { super.play(); window.open('spotify:', '_blank'); }
+  async play(context) { 
+    super.play(context); 
+    const query = encodeURIComponent(`${context || 'my'} playlist`.trim());
+    window.open(`spotify:search:${query}`, '_self'); 
+  }
   getDetectionKeys() { return ['spotify']; }
 }
 
@@ -40,6 +44,11 @@ class VLCAdapter extends BasePlayerAdapter {
 // ---- YouTube Music Adapter ----
 class YouTubeMusicAdapter extends BasePlayerAdapter {
   constructor() { super('YouTube Music', '▶️', '#FF0000'); }
+  async play(context) {
+    super.play(context);
+    const query = encodeURIComponent(`${context || 'my'} playlist`.trim());
+    window.open(`https://music.youtube.com/search?q=${query}`, '_blank');
+  }
   async search(query) {
     return `https://music.youtube.com/search?q=${encodeURIComponent(query)}`;
   }
@@ -55,6 +64,11 @@ class BrowserAdapter extends BasePlayerAdapter {
 // ---- Apple Music Adapter ----
 class AppleMusicAdapter extends BasePlayerAdapter {
   constructor() { super('Apple Music', '🍎', '#FC3C44'); }
+  async play(context) {
+    super.play(context);
+    const query = encodeURIComponent(`${context || 'my'} playlist`.trim());
+    window.open(`music://search?term=${query}`, '_self');
+  }
   getDetectionKeys() { return ['apple music', 'music.apple.com']; }
 }
 
@@ -134,10 +148,10 @@ export class UniversalMusicController {
     return parts[0] * 60 + (parts[1] || 0);
   }
 
-  play() {
+  play(context) {
     this.playbackState.isPlaying = true;
     this._startTimer();
-    this.adapter?.play();
+    this.adapter?.play(context);
   }
 
   pause() {
@@ -146,9 +160,9 @@ export class UniversalMusicController {
     this.adapter?.pause();
   }
 
-  toggle() {
+  toggle(context) {
     if (this.playbackState.isPlaying) this.pause();
-    else this.play();
+    else this.play(context);
   }
 
   next() {

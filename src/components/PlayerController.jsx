@@ -28,17 +28,17 @@ export default function PlayerController({ controller, songs, moodData, onSkip, 
   useEffect(() => {
     if (!controller || !songs?.length) return;
     controller.loadSongs(songs);
-    controller.play();
+    controller.play(moodData?.label);
     setState({ ...controller.getState() });
     setLiked(false);
-  }, [songs]);
+  }, [songs, moodData]);
 
   const accent = moodData?.color || '#a855f7';
   const glowShadow = `0 0 20px ${moodData?.glow || 'rgba(168,85,247,0.3)'}`;
 
   const handlePlayPause = () => {
     if (!controller) return;
-    controller.toggle();
+    controller.toggle(moodData?.label);
     setState({ ...controller.getState() });
   };
 
