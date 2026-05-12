@@ -22,7 +22,7 @@ import {
 import './App.css';
 
 const TABS = [
-  { id: 'chat', label: 'VN', icon: <Cpu size={14} /> },
+  { id: 'chat', label: 'ARIA', icon: <Cpu size={14} /> },
   { id: 'player', label: 'Player', icon: <Radio size={14} /> },
   { id: 'moods', label: 'Moods', icon: <Zap size={14} /> },
   { id: 'memory', label: 'Memory', icon: <Brain size={14} /> },
@@ -453,7 +453,7 @@ export default function App() {
                 animate={{ opacity: [0.6, 1, 0.6], scale: [1, 1.3, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               />
-              <span className="aria-status-title">VN Status</span>
+              <span className="aria-status-title">ARIA Status</span>
             </div>
             <div className="status-rows">
               {[

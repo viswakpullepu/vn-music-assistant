@@ -8,7 +8,7 @@ const INITIAL_MESSAGES = [
   {
     id: 'aria-0',
     from: 'aria',
-    text: "Hey. I'm VN — your AI music companion.",
+    text: "Hey. I'm ARIA — your AI music companion.",
     timestamp: Date.now() - 3000,
   },
   {
@@ -99,7 +99,7 @@ export default function ChatPanel({ onMoodDetected, currentMood, moodData, ariaR
             >
               {msg.from === 'aria' && (
                 <div className="aria-avatar" style={{ background: moodData?.color || '#a855f7' }}>
-                  V
+                  A
                 </div>
               )}
               <div className="chat-bubble-wrap">
@@ -124,7 +124,7 @@ export default function ChatPanel({ onMoodDetected, currentMood, moodData, ariaR
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
             >
-              <div className="aria-avatar" style={{ background: moodData?.color || '#a855f7' }}>V</div>
+              <div className="aria-avatar" style={{ background: moodData?.color || '#a855f7' }}>A</div>
               <div className="chat-bubble aria typing-indicator">
                 <span />
                 <span />

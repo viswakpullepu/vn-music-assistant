@@ -153,7 +153,7 @@ export default function MemoryPanel({ memory }) {
       {recentMoods.length === 0 && topGenres.length === 0 && (
         <div className="memory-empty">
           <Brain size={32} className="empty-icon" />
-          <p>VN is learning your taste.</p>
+          <p>ARIA is learning your taste.</p>
           <p className="empty-sub">Start chatting to build your profile.</p>
         </div>
       )}
