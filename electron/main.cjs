@@ -21,10 +21,10 @@ function createWindow() {
   const { width, height } = primaryDisplay.workAreaSize;
 
   mainWindow = new BrowserWindow({
-    width: 400,
-    height: 600,
-    x: width - 420, // Bottom right corner
-    y: height - 620,
+    width: 150,
+    height: 150,
+    x: width - 170, // Bottom right corner
+    y: height - 170,
     show: false, // Hidden initially
     frame: false, // Frameless window
     transparent: true, // Transparent for floating effect
@@ -129,4 +129,15 @@ ipcMain.on('hide-window', () => {
 
 ipcMain.on('show-window', () => {
   if (mainWindow) mainWindow.show();
+});
+
+ipcMain.on('resize-window', (event, w, h) => {
+  if (mainWindow) {
+    const currentPos = mainWindow.getPosition();
+    const currentSize = mainWindow.getSize();
+    // Adjust x, y so it expands upwards and leftwards from bottom-right corner
+    const newX = currentPos[0] - (w - currentSize[0]);
+    const newY = currentPos[1] - (h - currentSize[1]);
+    mainWindow.setBounds({ x: newX, y: newY, width: w, height: h });
+  }
 });

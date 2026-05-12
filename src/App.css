@@ -517,3 +517,39 @@
   }
   .left-sidebar { display: none; }
 }
+
+/* ---- Electron Widget Mode ---- */
+.widget-mode {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: transparent !important;
+  align-items: center;
+  overflow: hidden;
+}
+
+.widget-orb-container {
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-app-region: drag;
+  flex-shrink: 0;
+}
+
+.widget-chat-container {
+  width: 320px;
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  margin-top: 10px;
+  background: rgba(10, 10, 15, 0.85);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+}

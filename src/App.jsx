@@ -44,7 +44,19 @@ export default function App() {
   const [showWelcome, setShowWelcome] = useState(true);
   const [bgPalette, setBgPalette] = useState(['#a855f7', '#00f5ff', '#3b82f6']);
   const [sessionCount, setSessionCount] = useState(0);
+  const [chatOpen, setChatOpen] = useState(false);
   const responseRef = useRef(null);
+
+  // Resize Electron Window based on chat state
+  useEffect(() => {
+    if (window.electronAPI?.resizeWindow) {
+      if (chatOpen) {
+        window.electronAPI.resizeWindow(350, 600);
+      } else {
+        window.electronAPI.resizeWindow(150, 150);
+      }
+    }
+  }, [chatOpen]);
 
   // Init
   useEffect(() => {
@@ -105,7 +117,18 @@ export default function App() {
     const resp = getAIResponse(resolvedMood, data, memory);
     setTimeout(() => {
       speakAriaResponse(resp);
-      setTab('player');
+      
+      // Auto-play via adapter (simulated)
+      if (controller.adapter && data.songs?.length > 0) {
+        controller.play(); 
+      }
+
+      if (window.electronAPI) {
+        // Auto-hide chat after responding
+        setTimeout(() => setChatOpen(false), 3000);
+      } else {
+        setTab('player');
+      }
     }, 900);
   }, [memory]);
 
@@ -133,6 +156,44 @@ export default function App() {
 
   const accentColor = moodData?.color || '#a855f7';
   const glowColor = moodData?.glow || 'rgba(168,85,247,0.2)';
+
+  if (window.electronAPI) {
+    return (
+      <div className={`widget-mode ${chatOpen ? 'expanded' : ''}`}>
+        <motion.div 
+          className="widget-orb-container"
+          onClick={() => setChatOpen(!chatOpen)}
+          whileHover={{ scale: 1.05 }}
+        >
+          <OrbAssistant
+            mood={mood}
+            moodData={moodData}
+            isSpeaking={isSpeaking}
+            isListening={isListening}
+          />
+        </motion.div>
+        
+        <AnimatePresence>
+          {chatOpen && (
+            <motion.div 
+              className="widget-chat-container"
+              initial={{ opacity: 0, height: 0, y: -20 }}
+              animate={{ opacity: 1, height: 430, y: 0 }}
+              exit={{ opacity: 0, height: 0, y: -20 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
+              <ChatPanel
+                onMoodDetected={handleMoodDetected}
+                currentMood={mood}
+                moodData={moodData}
+                ariaResponse={ariaResponse}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  }
 
   return (
     <div className="app-root">
