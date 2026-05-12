@@ -13,7 +13,7 @@ import MemoryPanel from './components/MemoryPanel';
 
 import { MOODS, getAIResponse } from './mood-engine/moodEngine';
 import { getAdapterForPlayer, UniversalMusicController } from './player-adapters/playerAdapters';
-import { mediaDetection } from './media-detection/mediaDetection';
+import { mediaDetection, KNOWN_PLAYERS } from './media-detection/mediaDetection';
 import {
   loadMemory, saveMemory, recordMood, recordSkip,
   recordLike, boostGenre, getSuggestedMood
@@ -45,6 +45,8 @@ export default function App() {
   const [bgPalette, setBgPalette] = useState(['#a855f7', '#00f5ff', '#3b82f6']);
   const [sessionCount, setSessionCount] = useState(0);
   const [chatOpen, setChatOpen] = useState(false);
+  const [showPlayerSelection, setShowPlayerSelection] = useState(false);
+  const [defaultPlayer, setDefaultPlayer] = useState(localStorage.getItem('vn_default_player') || null);
   const responseRef = useRef(null);
 
   // Resize Electron Window based on chat state
@@ -152,7 +154,17 @@ export default function App() {
     setMemory(updated);
   }, [memory]);
 
-  const dismissWelcome = () => setShowWelcome(false);
+  const dismissWelcome = () => {
+    setShowWelcome(false);
+    if (!window.electronAPI) {
+      if (!defaultPlayer) {
+        setTimeout(() => setShowPlayerSelection(true), 400);
+      } else {
+        const p = KNOWN_PLAYERS.find(x => x.name === defaultPlayer);
+        if (p) setTimeout(() => handlePlayerDetected(p), 400);
+      }
+    }
+  };
 
   const accentColor = moodData?.color || '#a855f7';
   const glowColor = moodData?.glow || 'rgba(168,85,247,0.2)';
@@ -249,6 +261,43 @@ export default function App() {
               >
                 Begin Session
               </motion.button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Player Selection Overlay (Mobile / Web) */}
+      <AnimatePresence>
+        {showPlayerSelection && (
+          <motion.div
+            className="welcome-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{ zIndex: 900 }}
+          >
+            <motion.div className="welcome-content" initial={{ y: 20 }} animate={{ y: 0 }}>
+              <h2 className="welcome-title" style={{ fontSize: '32px' }}>Select Player</h2>
+              <p className="welcome-desc">Choose your default music app.</p>
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '20px', maxWidth: '300px' }}>
+                {KNOWN_PLAYERS.slice(0, 4).map(p => (
+                  <motion.button 
+                    key={p.name} 
+                    className="btn btn-ghost"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => {
+                      localStorage.setItem('vn_default_player', p.name);
+                      setDefaultPlayer(p.name);
+                      setShowPlayerSelection(false);
+                      handlePlayerDetected(p);
+                    }}
+                    style={{ background: 'rgba(255,255,255,0.05)', borderColor: `${p.color}40`, width: '130px' }}
+                  >
+                    {p.icon} {p.name}
+                  </motion.button>
+                ))}
+              </div>
             </motion.div>
           </motion.div>
         )}
