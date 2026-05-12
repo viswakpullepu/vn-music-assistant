@@ -20,15 +20,28 @@ class MediaDetectionService {
     this.listeners = [];
     this._scanInterval = null;
     this._isRunning = false;
+
+    // Listen to real Electron events if available
+    if (window.electronAPI) {
+      window.electronAPI.onPlayerDetected((playerData) => {
+        const fullPlayer = KNOWN_PLAYERS.find(p => p.name === playerData.name) || playerData;
+        if (this.detectedPlayer?.name !== fullPlayer.name) {
+          this.detectedPlayer = fullPlayer;
+          this._notify(fullPlayer);
+        }
+      });
+    }
   }
 
   start() {
     if (this._isRunning) return;
     this._isRunning = true;
-    // In a real Electron/Tauri app, this would use native process APIs.
-    // For demo, we simulate detection with a timer.
-    this._scanInterval = setInterval(() => this._scan(), 3000);
-    this._scan(); // immediate first scan
+    
+    // Fallback timer for browser demo
+    if (!window.electronAPI) {
+      this._scanInterval = setInterval(() => this._scan(), 3000);
+      this._scan(); // immediate first scan
+    }
   }
 
   stop() {
